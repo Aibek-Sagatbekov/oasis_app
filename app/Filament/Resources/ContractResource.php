@@ -30,14 +30,16 @@ class ContractResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-collection';
     protected static ?int $navigationSort = 2;
     public static function form(Form $form): Form
-    {
+    { 
         return $form
             ->schema([
                 Card::make()->columns(2)->schema([
 
                     TextInput::make('number')
                         ->label(__('fields.contract.number'))
-                        ->required(),
+                        ->maxValue(255)
+                        ->autofocus()
+                        ->required(),                        
 
                     DatePicker::make('date')
                         ->label(__('fields.contract.date'))
@@ -100,7 +102,7 @@ class ContractResource extends Resource
                             if ($livewire instanceof EditRecord) return true;
                         })
                         ->reactive()
-                        ->required(),
+                        ->required(), 
                 ]),
             ]);
     }

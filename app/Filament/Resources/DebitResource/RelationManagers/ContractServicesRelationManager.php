@@ -105,15 +105,6 @@ class ContractServicesRelationManager extends RelationManager
                     ->toggleable()
                     ->sortable()
                     ->searchable(),
-
-                TextColumn::make('pivot.sum')
-
-                    ->money('KZT', true)
-                    ->label(__('fields.contract_service.sum'))
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable(),
-
             ])
             ->filters([])
             ->headerActions([
