@@ -50,7 +50,6 @@ class ContractServicesResource extends Resource
                 Card::make()
                     ->columns(2)
                     ->schema([
-
                         Select::make('client_id')
                             ->label(__('fields.contract_service.client.name'))
                             ->options(fn () => Client::take(10)->get()->mapWithKeys(fn ($option) => [$option->getKey() => static::getOptionHTMLTemplate($option)])->toArray())
@@ -115,7 +114,6 @@ class ContractServicesResource extends Resource
                 Card::make()
                     ->columns(2)
                     ->schema([
-
                         Select::make('service_type_id')
                             ->label(__('fields.contract_service.services'))
                             ->options(fn () => ServiceType::take(10)->get()->pluck('name', 'id'))
@@ -200,7 +198,7 @@ class ContractServicesResource extends Resource
                     TextInput::make('amount')
                         ->label(__('fields.contract_service.amount'))
                         ->numeric()
-                        ->default(0)
+                        ->default(500.59)
                         ->required(),
                 ]),
 
@@ -253,6 +251,12 @@ class ContractServicesResource extends Resource
                     ->wrap()
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('created_at')
+                    ->label(__('fields.contract_service.created_at'))
+                    ->toggleable()
+                    ->wrap()
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
@@ -282,7 +286,7 @@ class ContractServicesResource extends Resource
     {
         return [
             'index' => Pages\ListContractServices::route('/'),
-            'create' => Pages\CreateContractServices::route('/create'),
+            #'create' => Pages\CreateContractServices::route('/create'),
             'edit' => Pages\EditContractServices::route('/{record}/edit'),
         ];
     }

@@ -37,8 +37,6 @@ class ContractResource extends Resource
 
                     TextInput::make('number')
                         ->label(__('fields.contract.number'))
-                        ->maxValue(255)
-                        ->autofocus()
                         ->required(),                        
 
                     DatePicker::make('date')
@@ -184,8 +182,8 @@ class ContractResource extends Resource
     {
         return [
             'index' => Pages\ListContracts::route('/'),
-            'create' => Pages\CreateContract::route('/create'),
-            'edit' => Pages\EditContract::route('/{record}/edit'),
+            #'create' => Pages\CreateContract::route('/create'),
+            #'edit' => Pages\EditContract::route('/{record}/edit'),
             #'export' => Pages\ExportContracts::route('/export'),
         ];
     }

@@ -288,6 +288,7 @@ return [
         'sub_contract' => [
             'number'    => '№ доп. соглашения',
         ],
-        'manager'       => 'Менеджер'
+        'manager'       => 'Менеджер',
+        'created_at'    => 'Дата создание'
     ],
 ];
