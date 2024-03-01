@@ -261,7 +261,6 @@ class ContractServicesResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
                 Filter::make('state')
                     ->label(__('fields.contract_service.state'))
                     ->form([
