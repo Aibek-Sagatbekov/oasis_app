@@ -11,11 +11,13 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Fieldset;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Model;
@@ -151,11 +153,57 @@ class ContractResource extends Resource
                 TextColumn::make('date_end')
                     ->label(__('fields.contract.date_end'))
                     ->date(),
-
-
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Filter::make('client')
+                    ->label(__('fields.contract.client.name'))
+                    ->form([
+                        Select::make('client_id')
+                            ->label(__('fields.contract.client.name'))
+                            ->options(function () {
+                                return Client::pluck('name', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите контрагента'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['client_id'])) {
+                            $query->where('client_id', $data['client_id']);
+                        }
+                    }),
+                Filter::make('type')
+                    ->label(__('fields.contract.type.label'))
+                    ->form([
+                        Select::make('type')
+                            ->label(__('fields.contract.type.label'))
+                            ->options([
+                                'local' => __('fields.contract.type.values.local'),
+                                'center' => __('fields.contract.type.values.center'),
+                            ])
+                            ->placeholder(__('Выберите тип контракта'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['type'])) {
+                            $query->where('type', $data['type']);
+                        }
+                    }),
+                Filter::make('manager')
+                    ->label(__('fields.contract.manager.name'))
+                    ->form([
+                        Select::make('manager_id')
+                            ->label(__('fields.contract.manager.name'))
+                            ->options(function () {
+                                return User::when(!auth()->user()->isAdmin(), function ($q) {
+                                    $q->where('id', auth()->user()->id);
+                                })->get()->pluck('name', 'id');
+                            })
+                            ->placeholder(__('Выберите менеджера контракта'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['manager_id'])) {
+                            $query->where('manager_id', $data['manager_id']);
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

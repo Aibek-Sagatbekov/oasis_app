@@ -25,6 +25,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Component;
@@ -258,8 +259,54 @@ class ContractServicesResource extends Resource
                     ->sortable()
                     ->searchable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
+                Filter::make('state')
+                    ->label(__('fields.contract_service.state'))
+                    ->form([
+                        Select::make('state_id')
+                            ->label(__('fields.contract_service.state'))
+                            ->options(function () {
+                                return State::pluck('name', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите филиала'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['state_id'])) {
+                            $query->where('state_id', $data['state_id']);
+                        }
+                    }),
+                Filter::make('program')
+                    ->label(__('fields.contract_service.programs'))
+                    ->form([
+                        Select::make('program_id')
+                            ->label(__('fields.contract_service.programs'))
+                            ->options(function () {
+                                return Program::pluck('name', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите канала'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['program_id'])) {
+                            $query->where('program_id', $data['program_id']);
+                        }
+                    }),
+                Filter::make('service_type')
+                    ->label(__('fields.contract_service.services'))
+                    ->form([
+                        Select::make('service_type_id')
+                            ->label(__('fields.contract_service.services'))
+                            ->options(function () {
+                                return ServiceType::pluck('name', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите услугу'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['service_type_id'])) {
+                            $query->where('service_type_id', $data['service_type_id']);
+                        }
+                    })
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

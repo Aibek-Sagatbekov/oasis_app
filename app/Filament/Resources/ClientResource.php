@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\CityResource\Pages\ListCities;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Models\City;
 use App\Models\Client;
@@ -223,6 +224,49 @@ class ClientResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Filter::make('legal_city')
+                    ->label(__('fields.client.legal_city'))
+                    ->form([
+                        Select::make('legal_city_id')
+                            ->label(__('fields.client.legal_city'))
+                            ->options(function () {
+                                return City::pluck('name', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите населенный пункт(Юр. адрес)'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['legal_city_id'])) {
+                            $query->where('legal_city_id', $data['legal_city_id']);
+                        }
+                    }),
+                Filter::make('actual_city')
+                    ->label(__('fields.client.actual_city'))
+                    ->form([
+                        Select::make('actual_city_id')
+                            ->label(__('fields.client.actual_city'))
+                            ->options(function () {
+                                return City::pluck('name', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите населенный пункт(факт)'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['actual_city_id'])) {
+                            $query->where('actual_city_id', $data['actual_city_id']);
+                        }
+                    }),
+                Filter::make('type')
+                    ->label(__('fields.client.type.name'))
+                    ->form([
+                        Select::make('type')
+                            ->label(__('fields.client.type.name'))
+                            ->options(['COMMERCE' => __('fields.client.type.COMMERCE'), 'GOVERMENTAL' => __('fields.client.type.GOVERMENTAL')])
+                            ->placeholder(__('Выберите тип'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['type'])) {
+                            $query->where('type', $data['type']);
+                        }
+                    })
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
