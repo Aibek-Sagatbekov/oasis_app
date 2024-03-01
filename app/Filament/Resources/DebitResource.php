@@ -64,7 +64,12 @@ class DebitResource extends Resource implements HasShieldPermissions
                             'close'  => __('fields.debit.status.values.close'),
                         ];
                         return $statuses[$get('status')];
-                    })
+                    }),
+                Placeholder::make('sum')
+                    ->label(__('fields.debit.sum'))
+                    ->content(function ($record) {
+                        return money($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 'KZT', true);
+                    }),
 
             ]);
     }

@@ -26,11 +26,11 @@ use Filament\Tables;
 use Filament\Tables\Columns\TagsColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Component;
 use Filament\Notifications\Notification;
-use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Validation\ValidationException;
 use Closure;
 use Filament\Tables\Actions\ViewAction;
@@ -199,7 +199,7 @@ class ContractServicesResource extends Resource
                     TextInput::make('amount')
                         ->label(__('fields.contract_service.amount'))
                         ->numeric()
-                        ->default(500.59)
+                        ->default(0)
                         ->required(),
                 ]),
 
