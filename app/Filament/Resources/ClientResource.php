@@ -94,12 +94,6 @@ class ClientResource extends Resource
                         ->preload(),
                     TextInput::make('actual_address')
                         ->label(__('fields.client.actual_address')),
-
-                    TextInput::make('manager_name')
-                        ->label(__('fields.client.manager_name'))
-                        ->hint('<b>Это поле вскоре будет удалено!</b>')
-                        ->disabled(),
-
                     Select::make('manager_id')
                         ->label(__('fields.client.manager.name'))
                         ->options(function (?Model $record) {
@@ -206,14 +200,6 @@ class ClientResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label(__('fields.client.KBE')),
-
-                TextColumn::make('manager_name')
-                    ->toggleable()
-                    ->wrap()
-                    ->sortable()
-                    ->searchable()
-                    ->label(__('fields.client.manager_name')),
-
                 TextColumn::make('manager.name')
                     ->searchable(isIndividual: true, isGlobal: true)
                     ->toggleable()
@@ -265,6 +251,23 @@ class ClientResource extends Resource
                     ->query(function ($query, array $data) {
                         if (isset($data['type'])) {
                             $query->where('type', $data['type']);
+                        }
+                    }),
+                Filter::make('manager')
+                    ->label(__('fields.client.manager.name'))
+                    ->form([
+                        Select::make('manager_id')
+                            ->label(__('fields.client.manager.name'))
+                            ->options(function () {
+                                return User::when(!auth()->user()->isAdmin(), function ($q) {
+                                    $q->where('id', auth()->user()->id);
+                                })->get()->pluck('name', 'id');
+                            })
+                            ->placeholder(__('Выберите менеджера'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['manager_id'])) {
+                            $query->where('manager_id', $data['manager_id']);
                         }
                     })
             ])

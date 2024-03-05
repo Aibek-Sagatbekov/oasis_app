@@ -260,7 +260,22 @@ class ContractServicesResource extends Resource
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            ->filters([
+            ->filters([ 
+                Filter::make('contract')
+                    ->label(__('fields.contract_service.contract'))
+                    ->form([
+                        Select::make('contract_id')
+                            ->label(__('fields.contract_service.contract'))
+                            ->options(function () {
+                                return Contract::pluck('number', 'id')->toArray();
+                            })
+                            ->placeholder(__('Выберите договора'))
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (isset($data['contract_id'])) {
+                            $query->where('contract_id', $data['contract_id']);
+                        }
+                }),
                 Filter::make('state')
                     ->label(__('fields.contract_service.state'))
                     ->form([
@@ -306,6 +321,7 @@ class ContractServicesResource extends Resource
                             $query->where('service_type_id', $data['service_type_id']);
                         }
                     })
+                
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -333,7 +349,7 @@ class ContractServicesResource extends Resource
         return [
             'index' => Pages\ListContractServices::route('/'),
             #'create' => Pages\CreateContractServices::route('/create'),
-            'edit' => Pages\EditContractServices::route('/{record}/edit'),
+            #'edit' => Pages\EditContractServices::route('/{record}/edit'),
         ];
     }
 
