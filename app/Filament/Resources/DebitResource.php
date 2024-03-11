@@ -68,10 +68,9 @@ class DebitResource extends Resource implements HasShieldPermissions
                 Placeholder::make('sum')
                     ->label(__('fields.debit.sum'))
                     ->content(function ($record) {
-                        return money($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 'KZT', true);
-                    }),
-
-            ]);
+                        return number_format($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 2, ',', ' ') . ' 〒';
+                    }), #money($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 'KZT', true);
+            ]); 
     }
 
     public static function table(Table $table): Table
@@ -112,8 +111,8 @@ class DebitResource extends Resource implements HasShieldPermissions
                     ->label(__('fields.debit.sum'))
                     ->getStateUsing(
                         static function ($record) {
-                            return money($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 'KZT', true);
-                        }
+                            return number_format($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 2, ',', ' ') . ' 〒';
+                        } #money($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 'KZT', true);
                     )
                     ->toggleable()
                     ->wrap()

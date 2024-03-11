@@ -30,11 +30,11 @@ class ListContractServices extends ListRecords
         $totalAmount = $filteredQuery->sum('amount');
         $totalCount = $filteredQuery->sum('count');
 
-        // Форматируем сумму
+        // Форматируем сумму 
         $formattedTotalAmount = number_format($totalAmount, 2, ',', ' ');
         $formattedTotalCount = number_format($totalCount, 0, ',', ' ');
 
         // Возвращаем заголовок с общей суммой
-        return parent::getHeading() . " | Общая сумма: $formattedTotalAmount" . " KZT | Общая кол-во: $formattedTotalCount";
+        return parent::getHeading() . " | Общая сумма: $formattedTotalAmount" . " 〒 | Общая кол-во: $formattedTotalCount";
     }
 }
