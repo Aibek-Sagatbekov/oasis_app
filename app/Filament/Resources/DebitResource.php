@@ -37,6 +37,7 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class DebitResource extends Resource implements HasShieldPermissions
 {
@@ -188,10 +189,10 @@ class DebitResource extends Resource implements HasShieldPermissions
                     ->visible(function ($record) {
                         return auth()->user()->can('close_debit') and $record->status === 'open';
                     })
-
             ])
             ->bulkActions([
                 // Tables\Actions\DeleteBulkAction::make(),
+                ExportBulkAction::make()
             ]);
     }
 

@@ -37,6 +37,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Model;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ContractServicesResource extends Resource
 {
@@ -334,6 +335,7 @@ class ContractServicesResource extends Resource
             ])
             ->bulkActions([
                 // Tables\Actions\DeleteBulkAction::make(),
+                ExportBulkAction::make()
             ]);
     }
 

@@ -3,11 +3,12 @@
 namespace App\Filament\Resources\ContractServicesResource\Pages;
 
 use App\Filament\Resources\ContractServicesResource;
-use App\Filament\Pages\Actions\ExportToExcelAction;
+use App\Filament\Pages\Actions\Test;
 use App\Models\ContractServices;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request; 
 
 class ListContractServices extends ListRecords
 {
@@ -17,7 +18,6 @@ class ListContractServices extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            ExportToExcelAction::make('exportToExcel'),
         ];
     }
 

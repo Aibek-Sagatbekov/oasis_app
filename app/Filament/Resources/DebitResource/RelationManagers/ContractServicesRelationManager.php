@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ContractServicesRelationManager extends RelationManager
 {
@@ -119,6 +120,7 @@ class ContractServicesRelationManager extends RelationManager
             ->bulkActions([
                 // ...
                 // Tables\Actions\DetachBulkAction::make(),
+                ExportBulkAction::make()
             ]);
     }
     public static function getTitle(): string

@@ -11,6 +11,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Hash;
 
+if (!class_exists('App\Filament\Profile\Profile\OasisProfile')) {
 class OasisProfile extends Profile implements HasForms
 {
     use InteractsWithForms;
@@ -147,4 +148,5 @@ class OasisProfile extends Profile implements HasForms
                 ]),
         ];
     }
+}
 }
