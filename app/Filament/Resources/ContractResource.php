@@ -84,17 +84,17 @@ class ContractResource extends Resource
 
                     Select::make('manager_id')
                         ->label(__('fields.contract_service.manager'))
-                        ->options(function (?Model $record) {
+                        ->options(function () {
                             return User::when(
                                 !auth()->user()->isAdmin(),
                                 fn ($q) => $q->where('id', auth()->user()->id)
                             )->get()->pluck('name', 'id');
                         })
-                        ->default(function (Page $livewire, ?Model $record) {
+                        ->default(function (Page $livewire) {
                             if ($livewire instanceof CreateRecord) {
                                 return auth()->user()->id;
                             }
-                            return null;
+                            return auth()->user()->id;
                         })
                         ->disablePlaceholderSelection()
                         ->disabled(function (Page $livewire) {
