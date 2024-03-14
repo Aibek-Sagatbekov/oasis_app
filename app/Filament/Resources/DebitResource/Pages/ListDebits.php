@@ -25,7 +25,6 @@ class ListDebits extends ListRecords
                 ->visible(function ($record) {
                     return auth()->user()->can('open_debit');
                 }),
-            ExportToExcelAction::make('exportToExcel'),
         ];
     }
 
