@@ -261,16 +261,30 @@ class ContractServicesResource extends Resource
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
-            ->filters([ 
+            ->filters([  
                 Filter::make('contract')
                     ->label(__('fields.contract_service.contract'))
                     ->form([
+                        Select::make('client_id')
+                            ->label(__('fields.contract_service.client.name'))
+                            ->options(fn () => Client::take(10)->get()->mapWithKeys(fn ($option) => [$option->getKey() => static::getOptionHTMLTemplate($option)])->toArray())
+                            ->getSearchResultsUsing(fn (string $search) => Client::where('name', 'LIKE', '%' . $search .  '%')->limit(10)->pluck('name', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => Client::find($value)?->name)
+                            ->searchable()
+                            ->hint(__('fields.contract_service.client.hint'))
+                            ->allowHtml()
+                            ->searchDebounce(500)
+                            ->reactive()
+                            ->placeholder(__('Выберите контрагент')),
                         Select::make('contract_id')
                             ->label(__('fields.contract_service.contract'))
-                            ->options(function () {
-                                return Contract::pluck('number', 'id')->toArray();
-                            })
+                            ->options(fn (Closure $get) => Contract::when($get('client_id'), fn ($q) => $q->where('client_id', $get('client_id')))->take(10)->get()->pluck('number', 'id'))
+                            ->getSearchResultsUsing(fn (string $search, Closure $get) => Contract::where('number', 'LIKE', '%' . $search .  '%')->when($get('client_id'), fn ($q) => $q->where('client_id', $get('client_id')))->limit(10)->pluck('number', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => Contract::find($value)?->number)
                             ->placeholder(__('Выберите договора'))
+                            ->searchable()
+                            ->searchDebounce(500)
+                            ->reactive()
                     ])
                     ->query(function ($query, array $data) {
                         if (isset($data['contract_id'])) {

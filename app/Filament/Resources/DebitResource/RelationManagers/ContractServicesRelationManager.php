@@ -97,9 +97,11 @@ class ContractServicesRelationManager extends RelationManager
                     ->label(__('fields.contract_service.amount'))
                     ->disabled(fn (RelationManager $livewire) => $livewire->ownerRecord->status === 'close')
                     ->updateStateUsing(function ($record, $state) {
+                        $amount = number_format($state, 2, '.', ''); // Преобразует значение $state в формат decimal(10,2)
+                        $sum = number_format($state * $record->pivot->count, 2, '.', ''); // Преобразует сумму в формат decimal(15,2)
                         $record->pivot->update([
-                            'amount'    => (int)$state,
-                            'sum'       => (int)$state * (int)$record->pivot->count,
+                            'amount' => $amount,
+                            'sum' => $sum,
                         ]);
                         return $state;
                     })

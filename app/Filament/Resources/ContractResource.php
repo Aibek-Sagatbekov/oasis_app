@@ -165,6 +165,11 @@ class ContractResource extends Resource
                             ->options(function () {
                                 return Client::pluck('name', 'id')->toArray();
                             })
+                            ->getSearchResultsUsing(fn (string $search) => Client::where('name', 'LIKE', '%' . $search .  '%')->limit(10)->pluck('name', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => Client::find($value)?->name)
+                            ->searchable()
+                            ->searchDebounce(500)
+                            ->reactive()
                             ->placeholder(__('Выберите контрагента'))
                     ])
                     ->query(function ($query, array $data) {
@@ -198,6 +203,11 @@ class ContractResource extends Resource
                                     $q->where('id', auth()->user()->id);
                                 })->get()->pluck('name', 'id');
                             })
+                            ->getSearchResultsUsing(fn (string $search) => User::where('name', 'LIKE', '%' . $search .  '%')->limit(10)->pluck('name', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => User::find($value)?->name)
+                            ->searchable()
+                            ->searchDebounce(500)
+                            ->reactive()
                             ->placeholder(__('Выберите менеджера контракта'))
                     ])
                     ->query(function ($query, array $data) {
