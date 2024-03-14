@@ -4,7 +4,6 @@ namespace App\Filament\Resources\ContractResource\Pages;
 
 use App\Filament\Resources\ContractResource;
 use App\Filament\Pages\Actions\ExportToExcelAction;
-#use Filament\Pages\Actions\ExportToExcelAction;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -16,7 +15,6 @@ class ListContracts extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            ExportToExcelAction::make('exportToExcel'), 
         ];
     }
 }

@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Pages\Page;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ContractResource extends Resource
 {
@@ -218,6 +219,7 @@ class ContractResource extends Resource
                 // Tables\Actions\DeleteBulkAction::make(),
                 // Tables\Actions\ForceDeleteBulkAction::make(),
                 // Tables\Actions\RestoreBulkAction::make(),
+                ExportBulkAction::make()
             ]);
     }
 
