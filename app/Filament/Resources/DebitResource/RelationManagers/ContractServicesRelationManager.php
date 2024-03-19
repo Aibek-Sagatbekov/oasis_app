@@ -2,23 +2,12 @@
 
 namespace App\Filament\Resources\DebitResource\RelationManagers;
 
-use App\Models\Contract;
-use Closure;
-use Filament\Forms;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Select;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\Layout;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\DB;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class ContractServicesRelationManager extends RelationManager
@@ -26,18 +15,23 @@ class ContractServicesRelationManager extends RelationManager
     protected static string $relationship = 'contract_services';
 
     protected static ?string $recordTitleAttribute = 'id';
+    
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([]);
     }
-
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-
+                TextColumn::make('contract.client.name')
+                    ->label(__('fields.contract_service.client.name'))
+                    ->searchable(isIndividual: true)                    
+                    ->toggleable()
+                    ->wrap()
+                    ->sortable(),
                 TextColumn::make('contract.number')
                     ->label(__('fields.contract_service.contract'))
                     ->searchable(isIndividual: true)
@@ -50,33 +44,24 @@ class ContractServicesRelationManager extends RelationManager
                     ->toggleable()
                     ->wrap()
                     ->sortable(),
-
-                TextColumn::make('contract.client.name')
-                    ->label(__('fields.contract_service.client.name'))
+                TextColumn::make('state.name')
+                    ->label(__('fields.contract_service.state'))
                     ->searchable(isIndividual: true)
                     ->toggleable()
                     ->wrap()
                     ->sortable(),
-
-                TextColumn::make('state.name')
-                    ->label(__('fields.contract_service.state'))
-                    ->toggleable()
-                    ->wrap()
-                    ->sortable()
-                    ->searchable(),
                 TextColumn::make('service_type.name')
                     ->label(__('fields.contract_service.services'))
+                    ->searchable(isIndividual: true)
                     ->toggleable()
                     ->wrap()
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
                 TextColumn::make('program.name')
                     ->label(__('fields.contract_service.programs'))
+                    ->searchable(isIndividual: true)
                     ->toggleable()
                     ->wrap()
-                    ->sortable()
-                    ->searchable(),
-
+                    ->sortable(),
                 TextInputColumn::make('pivot.count')
                     ->type('number')
                     ->label(__('fields.contract_service.count'))
@@ -89,8 +74,7 @@ class ContractServicesRelationManager extends RelationManager
                         return $state;
                     })
                     ->toggleable()
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
 
                 TextInputColumn::make('pivot.amount')
                     ->type('number')
@@ -106,10 +90,11 @@ class ContractServicesRelationManager extends RelationManager
                         return $state;
                     })
                     ->toggleable()
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
             ])
-            ->filters([])
+            ->filters([
+
+            ])
             ->headerActions([
                 // ...
                 // Tables\Actions\AttachAction::make()

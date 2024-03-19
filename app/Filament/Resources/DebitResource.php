@@ -3,54 +3,34 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DebitResource\Pages;
-use App\Filament\Resources\DebitResource\RelationManagers;
 use App\Filament\Resources\DebitResource\RelationManagers\ContractServicesRelationManager;
-use App\Models\Contract;
 use App\Models\Debit;
 use Carbon\Carbon;
-use Closure;
 use Filament\Forms;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Forms\Components\Grid;
-use Filament\Tables\Columns\Layout\Panel;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Str;
-use Webbingbrasil\FilamentDateFilter\DateFilter;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\Layout;
-use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Arr;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class DebitResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Debit::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-collection';
     protected static ?int $navigationSort = 4;
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
-
                 Placeholder::make('period')
                     ->label(__('fields.debit.period'))
                     ->content(function ($get) {
@@ -70,7 +50,12 @@ class DebitResource extends Resource implements HasShieldPermissions
                     ->label(__('fields.debit.sum'))
                     ->content(function ($record) {
                         return number_format($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 2, ',', ' ') . ' 〒';
-                    }), #money($record->contract_services()->withPivot('sum')->sum('contract_services_debit.sum'), 'KZT', true);
+                    }),
+                Placeholder::make('count')
+                    ->label(__('fields.debit.count'))
+                    ->content(function ($record) {
+                        return number_format($record->contract_services()->withPivot('count')->sum('contract_services_debit.count'), 2, ',', ' ');
+                    }),
             ]); 
     }
 
@@ -107,7 +92,6 @@ class DebitResource extends Resource implements HasShieldPermissions
                     ->toggleable()
                     ->wrap()
                     ->sortable(),
-                    #->searchable(),
                 TextColumn::make('sum')
                     ->label(__('fields.debit.sum'))
                     ->getStateUsing(
@@ -118,8 +102,6 @@ class DebitResource extends Resource implements HasShieldPermissions
                     ->toggleable()
                     ->wrap()
                     ->sortable(),
-                    #->searchable(),
-
             ])
             ->defaultSort('period', 'desc')
             ->filters([

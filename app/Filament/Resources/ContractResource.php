@@ -91,10 +91,8 @@ class ContractResource extends Resource
                             )->get()->pluck('name', 'id');
                         })
                         ->default(function (Page $livewire) {
-                            if ($livewire instanceof CreateRecord) {
-                                return auth()->user()->id;
-                            }
-                            return auth()->user()->id;
+                            $currentUser = auth()->user();
+                            return $currentUser->id;
                         })
                         ->disablePlaceholderSelection()
                         ->disabled(function (Page $livewire) {
